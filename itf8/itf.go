@@ -120,7 +120,7 @@ func EncodeUint32(b []byte, u uint32) int {
 	}
 }
 
-// EncodeInt32 encodes u as an ITF-8 into b, which must be large enough, and
+// EncodeInt32 encodes i as an ITF-8 into b, which must be large enough, and
 // and returns the number of bytes written.
 func EncodeInt32(b []byte, i int32) int {
 	return EncodeUint32(b, uint32(i))
