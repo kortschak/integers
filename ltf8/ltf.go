@@ -27,6 +27,30 @@ func nlo(x byte) int {
 	return int(pop[x>>2])
 }
 
+// Uint64Len returns the number of bytes required to encode u.
+func Uint64Len(u uint64) int {
+	switch {
+	case u < 0x80:
+		return 1
+	case u < 0x4000:
+		return 2
+	case u < 0x200000:
+		return 3
+	case u < 0x10000000:
+		return 4
+	case u < 0x800000000:
+		return 5
+	case u < 0x40000000000:
+		return 6
+	case u < 0x2000000000000:
+		return 7
+	case u < 0x100000000000000:
+		return 8
+	default:
+		return 9
+	}
+}
+
 // DecodeUint64 decodes the LTF-8 encoding in b and returns the uint64 value,
 // its width in bytes and whether the decoding was successful. If the encoding
 // is invalid, the expected length of b and false are returned. If b has zero
@@ -69,6 +93,11 @@ func DecodeUint64(b []byte) (u uint64, n int, ok bool) {
 func DecodeInt64(b []byte) (i int64, n int, ok bool) {
 	u, n, ok := DecodeUint64(b)
 	return int64(u), n, ok
+}
+
+// Int64Len returns the number of bytes required to encode i.
+func Int64Len(i int64) int {
+	return Uint64Len(uint64(i))
 }
 
 // EncodeUint64 encodes u as an LTF-8 into b, which must be large enough, and

@@ -27,6 +27,22 @@ func nlo(x byte) int {
 	return int(pop[x>>2])
 }
 
+// Uint32Len returns the number of bytes required to encode u.
+func Uint32Len(u uint32) int {
+	switch {
+	case u < 0x80:
+		return 1
+	case u < 0x4000:
+		return 2
+	case u < 0x200000:
+		return 3
+	case u < 0x10000000:
+		return 4
+	default:
+		return 5
+	}
+}
+
 // DecodeUint32 decodes the ITF-8 encoding in b and returns the uint32 value,
 // its width in bytes and whether the decoding was successful. If the encoding
 // is invalid, the expected length of b and false are returned. If b has zero
@@ -52,6 +68,11 @@ func DecodeUint32(b []byte) (u uint32, n int, ok bool) {
 		u = uint32(b[4]&0x0f) | uint32(b[3])<<4 | uint32(b[2])<<12 | uint32(b[1])<<20 | uint32(b[0]&0x0f)<<28
 	}
 	return u, n, true
+}
+
+// Int32Len returns the number of bytes required to encode i.
+func Int32Len(i int32) int {
+	return Uint32Len(uint32(i))
 }
 
 // DecodeInt32 decodes the ITF-8 encoding in b and returns the int32 value,
