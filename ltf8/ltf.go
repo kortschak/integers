@@ -61,7 +61,7 @@ func DecodeUint64(b []byte) (u uint64, n int, ok bool) {
 	}
 	n = nlo(b[0]) + 1
 	if len(b) < n {
-		return 0, len(b), false
+		return 0, n, false
 	}
 	switch n {
 	case 1:

@@ -53,7 +53,7 @@ func DecodeUint32(b []byte) (u uint32, n int, ok bool) {
 	}
 	n = nlo(b[0]&0xf0) + 1
 	if len(b) < n {
-		return 0, len(b), false
+		return 0, n, false
 	}
 	switch n {
 	case 1:
