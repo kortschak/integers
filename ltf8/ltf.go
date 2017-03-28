@@ -5,16 +5,16 @@
 // Package ltf8 provides LTF-8 integer encoding.
 package ltf8
 
-var pop = [64]byte{
+var pop = [16]byte{
 	0:  8,
-	5:  7,
-	14: 4,
-	15: 6,
-	29: 3,
-	36: 5,
-	44: 0,
-	54: 1,
-	59: 2,
+	1:  7,
+	4:  3,
+	5:  6,
+	6:  1,
+	9:  4,
+	10: 2,
+	11: 5,
+	14: 0,
 }
 
 // nlo returns the number of leading set bits in x.
@@ -22,9 +22,9 @@ func nlo(x byte) int {
 	x = ^x
 	x |= x >> 1
 	x |= x >> 2
-	x &^= x >> 4
-	x *= 21
-	return int(pop[x>>2])
+	x |= x >> 4
+	x *= 27
+	return int(pop[x>>4])
 }
 
 // Uint64Len returns the number of bytes required to encode u.
