@@ -74,3 +74,26 @@ func TestInt32RoundTrip(t *testing.T) {
 		}
 	}
 }
+
+func TestKnownValues(t *testing.T) {
+	tests := []struct {
+		bytes []byte
+		want  int32
+	}{
+		{bytes: []byte{0xff, 0xff, 0xff, 0xff, 0x0f}, want: -1},
+		{bytes: []byte{0xe0, 0x45, 0x4f, 0x46}, want: 4542278},
+	}
+
+	for _, test := range tests {
+		got, n, ok := DecodeInt32(test.bytes)
+		if !ok {
+			t.Error("failed to decode ITF-8 bytes: %08b", test.bytes)
+		}
+		if n != len(test.bytes) {
+			t.Errorf("disagreement in expected number of encoded bytes: n=%d len(b)=%d", n, len(test.bytes))
+		}
+		if got != test.want {
+			t.Errorf("disagreement in encoded value: got=%d want=%d (0x%[2]x)", got, test.want)
+		}
+	}
+}
